@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { FiTruck, FiShield, FiActivity, FiStar } from "react-icons/fi";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import TruckScene from "../../components/Three Fiber/truckScene";
 
 const LandingPage = () => {
   useEffect(() => {
