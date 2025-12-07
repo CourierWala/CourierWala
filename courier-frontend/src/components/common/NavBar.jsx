@@ -30,7 +30,6 @@ const NavBar = () => {
             Sign Up
           </Link>
         </nav>
-
         {/* MOBILE MENU BUTTON */}
         <button
           className="md:hidden text-3xl text-gray-700"

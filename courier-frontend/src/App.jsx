@@ -6,11 +6,8 @@ import { AuthProvider } from './context/AuthContext'
 import AppRoutes from './router/AppRoutes'
 
 function App() {
-
   return (
-    <div style={{ width: "100%", height: "100%" }}>
-     
-
+    <div>
       {/* <h1>Hello</h1> */}
       <AuthProvider>
         <AppRoutes />

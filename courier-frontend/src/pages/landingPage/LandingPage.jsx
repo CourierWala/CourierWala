@@ -5,6 +5,7 @@ import { FiTruck, FiShield, FiActivity, FiStar } from "react-icons/fi";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
+
 import TruckScene from "../../components/Three Fiber/truckScene" // 🚚 your 3D truck component
 
 const LandingPage = () => {
