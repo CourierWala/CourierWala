@@ -16,6 +16,10 @@ import ProfileSettings from '../pages/customer/ProfileSettings'
 import ManageStaff from '../pages/manager/ManageStaff'
 import MonitorDeliveries from '../pages/manager/MonitorDeliveries'
 import ManagerProfileSettings from '../pages/manager/ManagerProfileSettings'
+import Earnings from '../pages/staff/Earnings'
+import Profile from '../pages/staff/Profile'
+import StaffOverview from '../pages/staff/StaffOverview'
+import Overview from '../pages/staff/Overview'
 
 
 const AppRoutes = () => {
@@ -94,7 +98,47 @@ const AppRoutes = () => {
                         element={
                             // <ProtectedRoute>
                             // <RoleBasedRoute allowedRoles={["delivery_staff"]}>
-                            <StaffDashboard />
+                            <StaffDashboard/>
+                            // </RoleBasedRoute>
+                            // </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/staff/Earnings"
+                        element={
+                            // <ProtectedRoute>
+                            // <RoleBasedRoute allowedRoles={["delivery_staff"]}>
+                            <Earnings/>
+                            // </RoleBasedRoute>
+                            // </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/staff/profile"
+                        element={
+                            // <ProtectedRoute>
+                            // <RoleBasedRoute allowedRoles={["delivery_staff"]}>
+                            <Profile/>
+                            // </RoleBasedRoute>
+                            // </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/staff/ShipmentHistory"
+                        element={
+                            // <ProtectedRoute>
+                            // <RoleBasedRoute allowedRoles={["delivery_staff"]}>
+                            <ShipmentHistory/>
+                            // </RoleBasedRoute>
+                            // </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/staff/staffOverview"
+                        element={
+                            // <ProtectedRoute>
+                            // <RoleBasedRoute allowedRoles={["delivery_staff"]}>
+                            <StaffOverview/>
                             // </RoleBasedRoute>
                             // </ProtectedRoute>
                         }

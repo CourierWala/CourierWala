@@ -12,7 +12,7 @@ const NavBar = () => {
         {/* LOGO + ICON */}
         <Link to="/" className="flex items-center gap-2">
           <HiOutlineCube className="text-orange-500 text-3xl" />
-          <span className="text-2xl font-extrabold text-gray-900">Courier wala</span>
+          <span className="text-2xl font-extrabold text-gray-900">Courier Wala</span>
         </Link>
 
         {/* DESKTOP MENU */}
@@ -30,7 +30,6 @@ const NavBar = () => {
             Sign Up
           </Link>
         </nav>
-
         {/* MOBILE MENU BUTTON */}
         <button
           className="md:hidden text-3xl text-gray-700"
