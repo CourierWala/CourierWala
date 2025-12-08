@@ -7,6 +7,7 @@ import "aos/dist/aos.css";
 
 
 import TruckScene from "../../components/Three Fiber/truckScene" // 🚚 your 3D truck component
+import TrackPackagePopup from "../../components/common/TrackPackagePopup";
 
 const LandingPage = () => {
   useEffect(() => {
@@ -21,39 +22,11 @@ const LandingPage = () => {
       {/* 🚚 BACKGROUND TRUCK ANIMATION */}
       <div className="absolute hidden md:block top-28 right-0 w-full h-[200px] mb-20 opacity-90 pointer-events-none">
         <TruckScene />
+        <div><TrackPackagePopup /> </div>
       </div>
-
       {/* ---------------- HERO SECTION ---------------- */}
-      <section className="flex flex-col pt-10 md:flex-row items-center justify-between px-10 md:px-20 mt-28 relative z-10">
-        {/* LEFT TEXT */}
-        <div className="max-w-xl" data-aos="fade-right">
-          <h1 className="text-6xl font-extrabold leading-tight text-gray-900">
-            Fast. Secure. <br />
-            <span className="text-orange-600">Swift Deliveries.</span>
-          </h1>
 
-          <p className="text-gray-700 mt-4 text-lg leading-relaxed">
-            Courier wala ensures safe and lightning-fast delivery with real-time
-            tracking and seamless customer experience.
-          </p>
-
-          <div className="flex gap-4 mt-8">
-            <Link
-              to="/login"
-              className="px-6 py-3 bg-orange-600 text-white rounded-lg text-lg hover:bg-orange-700 shadow-md"
-            >
-              Get Started →
-            </Link>
-
-            <Link
-              to="/signup"
-              className="px-6 py-3 border border-orange-600 text-orange-600 rounded-lg text-lg hover:bg-orange-100 shadow-md"
-            >
-              Create Account
-            </Link>
-          </div>
-        </div>
-      </section>
+      <div className="mt-180"></div>
 
       {/* ---------------- FEATURES SECTION ---------------- */}
       <section className="mt-24 px-10  md:px-20 ">
