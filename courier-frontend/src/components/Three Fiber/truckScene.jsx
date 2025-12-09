@@ -53,7 +53,7 @@ function TruckModel({ url, onReady, entryCompleteRef, truckRef }) {
   useFrame((state, delta) => {
     const speed = 8;
     wheels.current.forEach((w) => {
-      w.rotation.z -= delta * speed;
+      w.rotation.y -= delta * speed;
     });
 
     // subtle suspension bobbing only AFTER entry completes
