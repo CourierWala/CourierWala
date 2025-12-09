@@ -1,5 +1,4 @@
 import React from "react";
-import BoxScene from "./components/Three Fiber/BoxScene";
 
 import './App.css'
 import { AuthProvider } from './context/AuthContext'
