@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Button from "../ui/Button";
 
 const PermissionsTab = () => {
   const [staffPermissions, setStaffPermissions] = useState([
@@ -54,9 +55,9 @@ const PermissionsTab = () => {
       </div>
 
       <div className="mt-8">
-        <button className="bg-orange-600 hover:bg-orange-700 transition text-white px-6 py-3 rounded-lg shadow">
+        <Button className="bg-orange-600 hover:bg-orange-700 transition text-white px-6 py-3 rounded-lg shadow">
           Save Permissions
-        </button>
+        </Button>
       </div>
     </div>
   );

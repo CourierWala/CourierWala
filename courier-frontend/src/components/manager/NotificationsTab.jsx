@@ -1,5 +1,5 @@
 import React from "react";
-
+import Button from "../ui/Button";
 const NotificationsTab = () => {
   return (
     <div className="bg-white p-6 sm:p-8 rounded-xl shadow-sm border border-gray-200">
@@ -8,27 +8,27 @@ const NotificationsTab = () => {
 
       <div className="space-y-4">
         <label className="flex items-center gap-3">
-          <input type="checkbox" className="h-4 w-4" defaultChecked/>
+          <input type="checkbox" className="h-4 w-4" defaultChecked />
           Email Notifications - New Shipments
         </label>
         <label className="flex items-center gap-3">
-          <input type="checkbox" className="h-4 w-4" defaultChecked/>
+          <input type="checkbox" className="h-4 w-4" defaultChecked />
           SMS Notifications - Staff Activity
         </label>
         <label className="flex items-center gap-3">
-          <input type="checkbox" className="h-4 w-4"/>
+          <input type="checkbox" className="h-4 w-4" />
           Push Notifications - System Alerts
         </label>
         <label className="flex items-center gap-3">
-          <input type="checkbox" className="h-4 w-4"/>
+          <input type="checkbox" className="h-4 w-4" />
           Weekly Summary Email
         </label>
       </div>
 
       <div className="mt-8">
-        <button className="bg-orange-600 hover:bg-orange-700 transition text-white px-6 py-3 rounded-lg shadow">
+        <Button className="bg-orange-600 hover:bg-orange-700 transition text-white px-6 py-3 rounded-lg shadow">
           Save Notifications
-        </button>
+        </Button>
       </div>
     </div>
   );
