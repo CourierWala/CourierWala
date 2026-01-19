@@ -19,7 +19,7 @@ const orders = [
   },
 ];
 
-export default function ShipmentHistory() {
+export default function  StaffShipmentHistory() {
   return (
     <div className="p-4 md:p-8 space-y-4">
       <div>
