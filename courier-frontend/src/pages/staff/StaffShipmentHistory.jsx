@@ -1,25 +1,49 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { fetchShipmentHistory } from "../../api/staff";
 
-const orders = [
+export default function StaffShipmentHistory() {
+  const [orderHistory, setOrderHistory] = useState([]);
+
+  const historyorders =[
   {
-    id: "ORDER-2842",
-    customer: "ram charan",
-    pickup: "34 gala chandinager , hupari ",
-    delivery: "202 shamnagar , mumbai ",
-    date: "2025-12-04",
-    amount: "$48.00",
+    "id": "ORDER-2",
+    "customer": "Om Kharmate",
+    "pickup": "123 Vaduj, Satara",
+    "delivery": "45 Ram Charan, Raigad",
+    "distance": "100 km",
+    "weight": "2.5 kg",
+    "amount": 45,
+    "status": "DELIVERED"
   },
   {
-    id: "ORDER-2843",
-    customer: "mohomad shami",
-    pickup: "303 Denver St, Denver, CO 80201",
-    delivery: "404 Phoenix Way, Phoenix, AZ 85001",
-    date: "2025-12-05",
-    amount: "$35.00",
-  },
-];
+    "id": "ORDER-3",
+    "customer": "Ram Charan",
+    "pickup": "Kolhapur",
+    "delivery": "Mumbai",
+    "distance": "210 km",
+    "weight": "3 kg",
+    "amount": 60,
+    "status": "DELIVERED"
+  }
+]
 
-export default function  StaffShipmentHistory() {
+
+
+  useEffect(() => {
+    //loadHistory();
+    setOrderHistory(historyorders);
+    window.alert("history loaded");
+  }, []);
+
+  const loadHistory = async () => {
+    try {
+      const data = await fetchShipmentHistory();
+      setOrderHistory(data);
+    } catch (error) {
+      console.error("Unable to load shipment history");
+    }
+  };
+
   return (
     <div className="p-4 md:p-8 space-y-4">
       <div>
@@ -40,7 +64,7 @@ export default function  StaffShipmentHistory() {
       </div>
 
       <div className="space-y-4">
-        {orders.map((order) => (
+        {orderHistory.map((order) => (
           <div
             key={order.id}
             className="bg-white rounded-xl border shadow-sm p-4 md:p-5 flex flex-col gap-2"
@@ -54,12 +78,13 @@ export default function  StaffShipmentHistory() {
                   {order.customer}
                 </p>
               </div>
+
               <div className="flex flex-col items-end text-xs">
                 <span className="px-3 py-1 rounded-full bg-green-50 text-green-700 font-semibold mb-1">
-                  Delivered
+                  {order.status}
                 </span>
                 <span className="text-green-600 font-medium">
-                  {order.amount}
+                  ₹{order.amount}
                 </span>
               </div>
             </div>
@@ -76,7 +101,9 @@ export default function  StaffShipmentHistory() {
             </div>
 
             <div className="flex justify-between items-center text-xs text-slate-500 mt-1">
-              <span>📅 {order.date}</span>
+              <span>
+                {order.distance} • {order.weight}
+              </span>
               <button className="text-orange-600 font-medium">
                 View Details
               </button>

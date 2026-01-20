@@ -1,6 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
+import { save } from "../../api/staff";
 
-export default function Profile() {
+export default function Profile(){
+
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
+  const [vehicleType ,setVehicleType] = useState('')
+  const [vehicleNumber ,setVehicleNumber] = useState('')
+
+  const savechanges = async()=>{
+
+    const response = await save(firstName,lastName,email,phone,vehicleType,vehicleNumber);
+
+    if (response['status'] === 'success') {
+        
+
+        window.alert("save changes sucessfully");
+      }
+
+  }
+
   return (
     <div className="p-4 md:p-8 flex flex-col gap-6">
       <h1 className="text-xl font-semibold">PROFILE</h1>
@@ -8,7 +29,7 @@ export default function Profile() {
       <div className="grid md:grid-cols-1 gap-6 ">
         <div className="bg-white rounded-xl shadow-sm border p-6 space-y-4">
           <div className="flex items-center gap-4">
-            <div className="h-14 w-14 rounded-full bg-orange-600 flex items-center justify-center text-white font-bold text-xl">
+            {/* <div className="h-14 w-14 rounded-full bg-orange-600 flex items-center justify-center text-white font-bold text-xl">
               
             </div>
             <div>
@@ -16,7 +37,7 @@ export default function Profile() {
               <button className="text-xs text-orange-600 font-medium">
                 
               </button>
-            </div>
+            </div> */}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
@@ -24,7 +45,7 @@ export default function Profile() {
               <label className="block text-xs text-slate-500 mb-1">
                 First Name
               </label>
-              <input
+              <input  onChange={(e) => setFirstName(e.target.value)}
                 className="w-full border rounded-lg px-3 py-2 text-sm"
                 defaultValue=""
               />
@@ -33,7 +54,7 @@ export default function Profile() {
               <label className="block text-xs text-slate-500 mb-1">
                 Last Name
               </label>
-              <input
+              <input  onChange={(e) => setLastName(e.target.value)}
                 className="w-full border rounded-lg px-3 py-2 text-sm"
                 defaultValue=""
               />
@@ -42,7 +63,7 @@ export default function Profile() {
               <label className="block text-xs text-slate-500 mb-1">
                 Email
               </label>
-              <input
+              <input  onChange={(e) => setEmail(e.target.value)}
                 className="w-full border rounded-lg px-3 py-2 text-sm"
                 defaultValue=""
               />
@@ -51,7 +72,7 @@ export default function Profile() {
               <label className="block text-xs text-slate-500 mb-1">
                 Phone Number
               </label>
-              <input
+              <input  onChange={(e) => setPhone(e.target.value)}
                 className="w-full border rounded-lg px-3 py-2 text-sm"
                 defaultValue=""
               />
@@ -60,7 +81,7 @@ export default function Profile() {
               <label className="block text-xs text-slate-500 mb-1">
                 Address
               </label>
-              <input
+              <input  onChange={(e) => setFirstName(e.target.value)}
                 className="w-full border rounded-lg px-3 py-2 text-sm"
                 defaultValue=""
               />
@@ -69,7 +90,10 @@ export default function Profile() {
               <label className="block text-xs text-slate-500 mb-1">
                 Vehicle Type
               </label>
-              <select className="w-full border rounded-lg px-3 py-2 text-sm">
+              <select className="w-full border rounded-lg px-3 py-2 text-sm"
+                 value={vehicleType}
+                 onChange={(e) => setVehicleType(e.target.value)}
+              >
                 <option>Van</option>
                 <option>Bike</option>
                 <option>Car</option>
@@ -79,14 +103,14 @@ export default function Profile() {
               <label className="block text-xs text-slate-500 mb-1">
                 Vehicle Number
               </label>
-              <input
+              <input  onChange={(e) => setVehicleNumber(e.target.value)}
                 className="w-full border rounded-lg px-3 py-2 text-sm"
                 defaultValue=""
               />
             </div>
           </div>
 
-          <button className="mt-4 px-4 py-2 rounded-lg bg-orange-600 text-white text-sm font-medium">
+          <button className="mt-4 px-4 py-2 rounded-lg bg-orange-600 text-white text-sm font-medium" onClick={savechanges}>
             Save Changes
           </button>
         </div>
