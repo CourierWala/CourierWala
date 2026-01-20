@@ -1,5 +1,6 @@
 import React from "react";
 import { FiUser, FiMail, FiPhone, FiMapPin } from "react-icons/fi";
+import Button from "../ui/Button";
 
 const ProfileTab = () => {
   return (
@@ -16,9 +17,9 @@ const ProfileTab = () => {
         </div>
 
         <div className="text-center sm:text-left">
-          <button className="px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-100 transition">
+          <Button className="px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-100 transition">
             Change Photo
-          </button>
+          </Button>
           <p className="text-gray-500 text-sm mt-1">
             JPG, PNG or GIF. Max size 2MB
           </p>
@@ -67,11 +68,11 @@ const ProfileTab = () => {
 
       </div>
 
-      {/* SAVE BUTTON */}
+      {/* SAVE Button */}
       <div className="mt-8">
-        <button className="bg-orange-600 hover:bg-orange-700 transition text-white px-6 py-3 rounded-lg shadow">
+        <Button className="bg-orange-600 hover:bg-orange-700 transition text-white px-6 py-3 rounded-lg shadow">
           Save Changes
-        </button>
+        </Button>
       </div>
 
     </div>

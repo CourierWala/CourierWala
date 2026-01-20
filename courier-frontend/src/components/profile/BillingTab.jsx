@@ -1,5 +1,6 @@
 import React from "react";
 import { FiCreditCard } from "react-icons/fi";
+import Button from "../ui/Button";
 
 const BillingTab = () => {
   return (
@@ -23,13 +24,13 @@ const BillingTab = () => {
 
           <div className="flex items-center gap-4">
             <span className="text-orange-600 font-medium">Default</span>
-            <button className="underline">Edit</button>
+            <Button className="underline">Edit</Button>
           </div>
         </div>
 
-        <button className="w-full border border-orange-600 text-orange-600 px-4 py-2 rounded-lg mt-4">
+        <Button className="w-full border border-orange-600 text-orange-600 px-4 py-2 rounded-lg mt-4">
           + Add Payment Method
-        </button>
+        </Button>
       </div>
 
       {/* BILLING HISTORY */}

@@ -1,5 +1,7 @@
 import React from "react";
 import { FiLock } from "react-icons/fi";
+import Button from "../ui/Button";
+
 
 const SecurityTab = () => {
   return (
@@ -18,9 +20,9 @@ const SecurityTab = () => {
 
       </div>
 
-      <button className="mt-6 bg-orange-600 text-white px-6 py-3 rounded-lg">
+      <Button className="mt-6 bg-orange-600 text-white px-6 py-3 rounded-lg">
         Update Password
-      </button>
+      </Button>
 
       {/* 2FA */}
       <div className="mt-10 p-6 bg-white border rounded-xl">

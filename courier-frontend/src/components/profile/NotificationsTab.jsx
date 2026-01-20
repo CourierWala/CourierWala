@@ -1,5 +1,6 @@
 import React from "react";
 import { FiBell } from "react-icons/fi";
+import Button from "../ui/Button";
 
 const NotificationsTab = () => {
   const items = [
@@ -33,9 +34,9 @@ const NotificationsTab = () => {
         ))}
       </div>
 
-      <button className="mt-6 bg-orange-600 text-white px-6 py-3 rounded-lg">
+      <Button className="mt-6 bg-orange-600 text-white px-6 py-3 rounded-lg">
         Save Preferences
-      </button>
+      </Button>
     </div>
   );
 };
