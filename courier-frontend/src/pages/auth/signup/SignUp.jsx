@@ -3,6 +3,7 @@ import { FiUser, FiMail, FiPhone, FiLock } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import NavBar from "../../../components/common/NavBar";
 import { toast } from "react-toastify";
+import { customer_signup } from "../../../api/customer";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -37,8 +38,9 @@ const SignUp = () => {
     //   }
     // }
 
-    
+
     // API call later
+    //const response = await customer_signup(name,email,phone,password);
     // signup({ name, email, phone, password })
 
     toast.success("Account created successfully");

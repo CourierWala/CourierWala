@@ -1,7 +1,8 @@
 import React from 'react'
 import Overview from './Overview'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell } from "@fortawesome/free-solid-svg-icons";
+
+import { FiBell } from "react-icons/fi";
+
 
 import { Link, Outlet } from 'react-router-dom'
 import Sidebar from '../../components/common/sidebar';
@@ -27,8 +28,7 @@ const StaffDashboard = () => {
           </h1>
           <div className='text-lg'>
            
-           <Link to="/staff/notifications"><FontAwesomeIcon icon={faBell} /></Link>
-
+           <Link to="/staff/notifications"> <FiBell  className="text-gray-700 cursor-pointer text-black text-2xl" /></Link>
           </div>
         </header>
         <main className="flex-1 w-full overflow-x-hidden">

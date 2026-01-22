@@ -3,6 +3,7 @@ import { FiMail, FiLock } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import NavBar from "../../../components/common/NavBar";
 import { toast } from "react-toastify";
+import { customer_login } from "../../../api/customer";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -25,8 +26,10 @@ const Login = () => {
         return;
       }
     }
+
+
     // API call later
-    // login(email, password, remember)
+    //const response = await customer_login(email, password)
     toast.success("Login successful");
     navigate("/customer/dashboard");
   };

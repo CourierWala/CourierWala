@@ -3,6 +3,7 @@ import { FiUser, FiMail, FiPhone, FiLock, FiTruck } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import NavBar from "../../../components/common/NavBar";
 import { toast } from "react-toastify";
+import { staff_signup } from "../../../api/staff";
 
 const StaffSignUp = () => {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ const StaffSignUp = () => {
     //     return;
     //   }
     // }
-
+    //const response = await staff_signup(form.name,form.email,form.phone,form.password,form.vehicleType,form.vehicleNumber,form.licenseNumber,form.hubId);
     toast.success("Staff registered successfully");
     navigate("/staff/dashboard");
   };

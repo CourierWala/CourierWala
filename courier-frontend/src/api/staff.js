@@ -79,6 +79,16 @@ export async function changePassword(staffid,currentPassword,newPassword){
   } catch (error){
     console.error("Error in changing password", error);
   }
+}
 
+export async function staff_signup(name,email,phone,password,vehicleType,vehicleNumber,licenseNumber,hubId){
+  try {
+        const url = `${config.server}/staff/signup`;
+        const body ={name,email,phone,password,vehicleType,vehicleNumber,licenseNumber,hubId} 
+        const response = await axios.post(url,body);
+        return response.data;
+  } catch (error){
+    console.error("Error in changing password", error);
+  }
 }
 
