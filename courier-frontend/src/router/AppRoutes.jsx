@@ -29,6 +29,7 @@ import AdminHubManagement from './../pages/admin/AdminHubManagement';
 import AdminInvestorRelations from '../pages/admin/AdminInvestorRelations'
 import Admin from '../pages/admin/Admin'
 import NotificationTab from '../pages/staff/NotificationTab'
+import StaffSignUp from '../pages/auth/signup/Staffsignup'
 
 
 const AppRoutes = () => {
@@ -42,6 +43,7 @@ const AppRoutes = () => {
                     {/* Public Routes */}
                     <Route path="/login" element={<Login />} />
                     <Route path="signup" element={<SignUp />} />
+                    <Route  path="staffsignup" element={<StaffSignUp />} /> 
 
 
                     {/* Customer Routes */}
@@ -104,7 +106,7 @@ const AppRoutes = () => {
                   
                         {/* // staff routes */}
                 <Route path="/staff" element={<StaffDashboard />}>
-
+                    
                     <Route 
                         path="dashboard" 
                         element={<Overview />} />
@@ -122,6 +124,8 @@ const AppRoutes = () => {
                         path="notifications" 
                         element={<NotificationTab />} />    
                 </Route>
+
+                
 
 
 
