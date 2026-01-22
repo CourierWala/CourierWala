@@ -46,117 +46,74 @@ const styles = {
   },
 };
 
-
-const OlaAutocomplete = ({ onSelect }) => {
-  const [query, setQuery] = useState("");
+const OlaAutocomplete = ({ label, value, onSelect }) => {
+  const [query, setQuery] = useState(value || "");
   const [suggestions, setSuggestions] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [isSelected, setIsSelected] = useState(false);
+  const debounceRef = useRef(null);
 
-  const containerRef = useRef(null);
-  const isSelectingRef = useRef(false);
-
-  // Debounced API call
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (isSelectingRef.current) {
-        isSelectingRef.current = false;
-        return;
-      }
+    if (isSelected) return;
+    if (!query || query.length < 3) {
+      setSuggestions([]);
+      return;
+    }
 
-      if (query.trim().length > 0) {
-        fetchSuggestions(query);
-      } else {
-        setSuggestions([]);
+    debounceRef.current = setTimeout(async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:8080/api/customer/location/autocomplete",
+          { params: { input: query } }
+        );
+
+        setSuggestions(res.data.predictions || []);
+      } catch (err) {
+        console.error(err);
       }
     }, 400);
 
-    return () => clearTimeout(timer);
-  }, [query]);
+    return () => clearTimeout(debounceRef.current);
+  }, [query, isSelected]);
 
-  // Close dropdown on outside click
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(e.target)
-      ) {
-        setOpen(false);
-      }
-    };
+  const handleSelect = (item) => {
+    const selectedAddress = item.description;
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const fetchSuggestions = async (input) => {
-    try {
-      setLoading(true);
-      setOpen(true);
-
-      const response = await axios.get(
-        "http://localhost:5000/api/olamaps/autocomplete",
-        { params: { input } }
-      );
-
-      setSuggestions(response.data.predictions || []);
-    } catch (error) {
-      console.error("Autocomplete error:", error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSelect = (place) => {
-    isSelectingRef.current = true;
-
-    const selectedPlace = {
-      description: place.description,
-      lat: place.geometry?.location?.lat,
-      lng: place.geometry?.location?.lng,
-      raw: place,
-    };
-
-    setQuery(place.description);
+    setQuery(selectedAddress);
     setSuggestions([]);
-    setOpen(false);
+    setIsSelected(true);
 
-    if (onSelect) {
-      onSelect(selectedPlace);
-    }
+    onSelect({
+      address: selectedAddress,
+      lat: item.geometry?.location?.lat,
+      lng: item.geometry?.location?.lng,
+    });
   };
 
   return (
-    <div ref={containerRef} style={styles.wrapper}>
+    <div className="relative">
+      <p className="text-gray-700 mb-1">{label}</p>
       <input
-        type="text"
         value={query}
-        placeholder="Search location..."
-        onChange={(e) => setQuery(e.target.value)}
-        onFocus={() => query && setOpen(true)}
-        style={styles.input}
+        onChange={(e) => {
+          setQuery(e.target.value);
+          setIsSelected(false); // 🔁 allow searching again
+        }}
+        className="w-full border rounded-lg p-2 focus:ring focus:ring-orange-200"
+        placeholder="Start typing address..."
       />
 
-      {open && (
-        <div style={styles.dropdown}>
-          {loading && <div style={styles.loading}>Loading...</div>}
-
-          {!loading && suggestions.length === 0 && (
-            <div style={styles.noResult}>No results found</div>
-          )}
-
-          {!loading &&
-            suggestions.map((item, index) => (
-              <div
-                key={index}
-                style={styles.item}
-                onClick={() => handleSelect(item)}
-              >
-                {item.description}
-              </div>
-            ))}
-        </div>
+      {suggestions.length > 0 && (
+        <ul className="absolute z-10 w-full bg-white border rounded-lg shadow mt-1 max-h-60 overflow-auto">
+          {suggestions.map((item) => (
+            <li
+              key={item.place_id}
+              onClick={() => handleSelect(item)}
+              className="p-2 cursor-pointer hover:bg-gray-100"
+            >
+              {item.description}
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );
