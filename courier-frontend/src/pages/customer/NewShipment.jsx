@@ -2,30 +2,147 @@ import React, { useState } from "react";
 import CustomerLayout from "../../layouts/CustomerLayout"
 import { HiLocationMarker, HiOutlineCube } from "react-icons/hi";
 import { MdLocalShipping } from "react-icons/md";
+import OlaAutocomplete from "../../components/common/OlaAutocomplete";
+import { toast } from "react-toastify";
 
 const NewShipment = () => {
   const [form, setForm] = useState({
     pickupAddress: "",
     pickupCity: "",
-    pickupZip: "",
+    pickupPincode: "",
     pickupDate: "",
     deliveryAddress: "",
     deliveryCity: "",
-    deliveryZip: "",
+    deliveryPincode: "",
     packageSize: "",
     weight: "",
-    serviceType: "",
+    deliveryType: "",
     description: "",
+    pickupLatitude: "",
+    pickupLongitude: "",
+    deliveryLatitude: "",
+    deliveryLongitude: ""
+
   });
+
+  const [pickupLocation, setPickupLocation] = useState({})
+  const [deliveryLocation, setDeliveryLocation] = useState({})
+
+
+  const isFutureOrToday = (dateStr) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const pickupDate = new Date(dateStr);
+    pickupDate.setHours(0, 0, 0, 0);
+
+    return pickupDate >= today;
+  };
+
+  const isSameLocation = (p1, p2) => {
+    const latDiff = Math.abs(p1.lat - p2.lat);
+    const lngDiff = Math.abs(p1.lng - p2.lng);
+
+    return latDiff < 0.0001 && lngDiff < 0.0001;
+  };
+
+
+
+  const validateForm = () => {
+    if (!form.pickupAddress.trim()) {
+      toast.error("Pickup address is required");
+      return false;
+    }
+
+    if (isSameLocation(pickupLocation, deliveryLocation)) {
+      toast.error("Pickup and delivery locations cannot be the same");
+      return false;
+    }
+
+
+    if (!form.pickupCity.trim()) {
+      toast.error("Pickup city is required");
+      return false;
+    }
+
+    if (!form.pickupDate) {
+      toast.error("Pickup date is required");
+      return false;
+    }
+
+    if (!isFutureOrToday(form.pickupDate)) {
+      toast.error("Pickup date must be today or a future date");
+      return false;
+    }
+
+
+    if (!/^\d{6}$/.test(form.pickupPincode)) {
+      toast.error("Pickup pincode must be 6 digits");
+      return false;
+    }
+
+    if (!form.deliveryAddress.trim()) {
+      toast.error("Delivery address is required");
+      return false;
+    }
+
+    if (!form.deliveryCity.trim()) {
+      toast.error("Delivery city is required");
+      return false;
+    }
+
+    if (!/^\d{6}$/.test(form.deliveryPincode)) {
+      toast.error("Delivery pincode must be 6 digits");
+      return false;
+    }
+
+    if (!form.weight || form.weight <= 0) {
+      toast.error("Weight must be greater than 0");
+      return false;
+    }
+
+    if (!form.packageSize) {
+      toast.error("Please select package size");
+      return false;
+    }
+
+    if (!pickupLocation.lat || !pickupLocation.lng) {
+      toast.error("Please select pickup location on map");
+      return false;
+    }
+
+    if (!deliveryLocation.lat || !deliveryLocation.lng) {
+      toast.error("Please select delivery location on map");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) return;
+
+    const shipmentData = {
+      ...form,
+      pickupLatitude: pickupLocation.lat,
+      pickupLongitude: pickupLocation.lng,
+      deliveryLatitude: deliveryLocation.lat,
+      deliveryLongitude: deliveryLocation.lng,
+    };
+
+    console.log(shipmentData);
+
+    // axios.post(...)
+    toast.success("Shipment booked successfully 🚚");
+  };
+
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert("Shipment Booked Successfully!");
-  };
 
   return (
     <CustomerLayout>
@@ -44,6 +161,10 @@ const NewShipment = () => {
             icon={<HiLocationMarker className="text-orange-500 text-2xl" />}
             title="Pickup Information"
           >
+            <OlaAutocomplete
+              placeholder="Pickup Location"
+              setLocation={setPickupLocation}
+            />
             <TwoColumn>
               <InputField
                 label="Street Address"
@@ -52,11 +173,15 @@ const NewShipment = () => {
                 onChange={handleChange}
               />
               <InputField
-                label="ZIP Code"
-                name="pickupZip"
-                value={form.pickupZip}
+                label="PIN Code"
+                name="pickupPincode"
+                value={form.pickupPincode}
                 onChange={handleChange}
+                isPin
               />
+
+
+
             </TwoColumn>
 
             <TwoColumn>
@@ -81,6 +206,10 @@ const NewShipment = () => {
             icon={<MdLocalShipping className="text-orange-500 text-2xl" />}
             title="Delivery Information"
           >
+            <OlaAutocomplete
+              placeholder="Delivery Location"
+              setLocation={setDeliveryLocation}
+            />
             <TwoColumn>
               <InputField
                 label="Street Address"
@@ -89,11 +218,13 @@ const NewShipment = () => {
                 onChange={handleChange}
               />
               <InputField
-                label="ZIP Code"
-                name="deliveryZip"
-                value={form.deliveryZip}
+                label="PIN Code"
+                name="deliveryPincode"
+                value={form.deliveryPincode}
                 onChange={handleChange}
+                isPin
               />
+
             </TwoColumn>
 
             <TwoColumn>
@@ -128,10 +259,10 @@ const NewShipment = () => {
             </TwoColumn>
 
             <SelectField
-              label="Service Type"
-              name="serviceType"
-              options={["Standard", "Express", "Same Day"]}
-              value={form.serviceType}
+              label="Delivery Type"
+              name="deliveryType"
+              options={["Standard", "Express"]}
+              value={form.deliveryType}
               onChange={handleChange}
             />
 
@@ -189,18 +320,42 @@ const TwoColumn = ({ children }) => (
   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">{children}</div>
 );
 
-const InputField = ({ label, name, type = "text", value, onChange }) => (
+const InputField = ({
+  label,
+  name,
+  type,
+  value,
+  onChange,
+  isPin = false
+}) => (
   <label className="block">
     <p className="text-gray-700 mb-1">{label}</p>
     <input
       type={type}
       name={name}
       value={value}
-      onChange={onChange}
+      onChange={(e) => {
+        if (isPin) {
+          const onlyDigits = e.target.value.replace(/\D/g, "");
+          if (onlyDigits.length <= 6) {
+            onChange({
+              target: { name, value: onlyDigits }
+            });
+          }
+        } else {
+          onChange(e);
+        }
+      }}
+      maxLength={isPin ? 6 : undefined}
+      pattern={isPin ? "[1-9][0-9]{5}" : undefined}
+      title={isPin ? "Enter a valid 6-digit PIN code" : undefined}
+      required={isPin}
+      inputMode={isPin ? "numeric" : undefined}
       className="w-full border rounded-lg p-2 focus:ring focus:ring-orange-200"
     />
   </label>
 );
+
 
 const SelectField = ({ label, name, options, value, onChange }) => (
   <label className="block">
