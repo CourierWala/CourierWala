@@ -22,13 +22,11 @@ const NewShipment = () => {
     pickupLatitude: "",
     pickupLongitude: "",
     deliveryLatitude: "",
-    deliveryLongitude: ""
-
+    deliveryLongitude: "",
   });
 
-  const [pickupLocation, setPickupLocation] = useState({})
-  const [deliveryLocation, setDeliveryLocation] = useState({})
-
+  const [pickupLocation, setPickupLocation] = useState({});
+  const [deliveryLocation, setDeliveryLocation] = useState({});
 
   const isFutureOrToday = (dateStr) => {
     const today = new Date();
@@ -47,8 +45,6 @@ const NewShipment = () => {
     return latDiff < 0.0001 && lngDiff < 0.0001;
   };
 
-
-
   const validateForm = () => {
     if (!form.pickupAddress.trim()) {
       toast.error("Pickup address is required");
@@ -59,7 +55,6 @@ const NewShipment = () => {
       toast.error("Pickup and delivery locations cannot be the same");
       return false;
     }
-
 
     if (!form.pickupCity.trim()) {
       toast.error("Pickup city is required");
@@ -75,7 +70,6 @@ const NewShipment = () => {
       toast.error("Pickup date must be today or a future date");
       return false;
     }
-
 
     if (!/^\d{6}$/.test(form.pickupPincode)) {
       toast.error("Pickup pincode must be 6 digits");
@@ -139,11 +133,9 @@ const NewShipment = () => {
     toast.success("Shipment booked successfully 🚚");
   };
 
-
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-
 
   return (
     <CustomerLayout>
@@ -179,16 +171,13 @@ const NewShipment = () => {
                 onChange={handleChange}
                 isPin
               />
-
-
-
             </TwoColumn>
 
             <TwoColumn>
-              <SelectField
+              <InputField
                 label="Pickup City"
                 name="pickupCity"
-                options={CITY_OPTIONS}
+                type="text"
                 value={form.pickupCity}
                 onChange={handleChange}
               />
@@ -227,14 +216,13 @@ const NewShipment = () => {
                 onChange={handleChange}
                 isPin
               />
-
             </TwoColumn>
 
             <TwoColumn>
-              <SelectField
+              <InputField
                 label="Delivery City"
                 name="deliveryCity"
-                options={CITY_OPTIONS}
+                type="text"
                 value={form.deliveryCity}
                 onChange={handleChange}
               />
@@ -324,14 +312,7 @@ const TwoColumn = ({ children }) => (
   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">{children}</div>
 );
 
-const InputField = ({
-  label,
-  name,
-  type,
-  value,
-  onChange,
-  isPin = false
-}) => (
+const InputField = ({ label, name, type, value, onChange, isPin = false }) => (
   <label className="block">
     <p className="text-gray-700 mb-1">{label}</p>
     <input
@@ -343,7 +324,7 @@ const InputField = ({
           const onlyDigits = e.target.value.replace(/\D/g, "");
           if (onlyDigits.length <= 6) {
             onChange({
-              target: { name, value: onlyDigits }
+              target: { name, value: onlyDigits },
             });
           }
         } else {
@@ -359,7 +340,6 @@ const InputField = ({
     />
   </label>
 );
-
 
 const SelectField = ({ label, name, options, value, onChange }) => (
   <label className="block">
@@ -412,6 +392,60 @@ const handleSubmit = (e) => {
     },
   };
 
+  const handlePlaceOrder = async () => {
+    // 1. Load Razorpay script
+    const isLoaded = await loadRazorpay();
+    if (!isLoaded) {
+      alert("Razorpay SDK failed to load");
+      return;
+    }
+
+    // 2. Call backend to create payment order
+    const paymentRes = await axios.post(
+      "http://localhost:8080/payments/create",
+      null,
+      { params: { amount: 500 } }, // example amount
+    );
+
+    console.log("PaymentRes", paymentRes);
+
+    const { razorpayOrderId, amount } = paymentRes.data;
+
+    // 3. Configure Razorpay options
+    const options = {
+      key: "rzp_test_S7hQkOvlt6yfQ1", // TEST KEY ID (safe on frontend)
+      amount: amount * 100, // paise
+      currency: "INR",
+      name: "Prashantkumar",
+      description: "Courier Delivery Payment",
+      order_id: razorpayOrderId,
+
+      handler: async function (response) {
+        // 4. Send payment details to backend for verification
+        await axios.post("http://localhost:8080/payments/verify", {
+          razorpayOrderId: response.razorpay_order_id,
+          razorpayPaymentId: response.razorpay_payment_id,
+          razorpaySignature: response.razorpay_signature,
+        });
+
+        alert("Payment successful");
+      },
+
+      prefill: {
+        name: "Test User",
+        email: "test@example.com",
+        contact: "9999999999",
+      },
+
+      theme: {
+        color: "#3399cc",
+      },
+    };
+
+    // 5. Open Razorpay checkout
+    const rzp = new window.Razorpay(options);
+    rzp.open();
+  };
+
   console.dir("FINAL PAYLOAD:\n", payload);
 };
-
