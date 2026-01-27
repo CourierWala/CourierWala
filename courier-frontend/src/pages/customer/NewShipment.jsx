@@ -8,6 +8,7 @@ import { createShipment } from "../../api/customer";
 import { loadRazorpay } from "../../utils/loadRazorpay";
 import axios from "axios";
 import { createPaymentOrder, handlePaymentResponse } from "../../api/payment";
+import { useNavigate } from "react-router-dom";
 
 const NewShipment = () => {
   const [form, setForm] = useState({
@@ -117,6 +118,11 @@ const NewShipment = () => {
     return true;
   };
 
+  const nav = useNavigate();
+  const successPaymentHandler = (res) => {
+    handlePaymentResponse(res);
+    nav("/customer/dashboard");
+  };
   const handlePlaceOrder = async (order_id) => {
     // 1. Load Razorpay script
     const isLoaded = await loadRazorpay();
@@ -149,7 +155,7 @@ const NewShipment = () => {
       description: "Courier Delivery Payment",
       order_id: razorpayOrderId,
 
-      handler: handlePaymentResponse,
+      handler: successPaymentHandler,
 
       prefill: {
         name: "Test User",
