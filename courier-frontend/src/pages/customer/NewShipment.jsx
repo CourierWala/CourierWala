@@ -7,6 +7,8 @@ import { toast } from "react-toastify";
 import { createShipment } from "../../api/customer";
 import { loadRazorpay } from "../../utils/loadRazorpay";
 import axios from "axios";
+import { createPaymentOrder, handlePaymentResponse } from "../../api/payment";
+import { useNavigate } from "react-router-dom";
 
 const NewShipment = () => {
   const [form, setForm] = useState({
@@ -116,6 +118,11 @@ const NewShipment = () => {
     return true;
   };
 
+  const nav = useNavigate();
+  const successPaymentHandler = (res) => {
+    handlePaymentResponse(res);
+    nav("/customer/dashboard");
+  };
   const handlePlaceOrder = async (order_id) => {
     // 1. Load Razorpay script
     const isLoaded = await loadRazorpay();
@@ -125,11 +132,14 @@ const NewShipment = () => {
     }
 
     // 2. Call backend to create payment order
-    const paymentRes = await axios.post(
-      "http://localhost:8080/payments/create",
-      null,
-      { params: { amount: 100, order_id: order_id } },
-    );
+    // const paymentRes = await axios.post(
+    //   "http://localhost:8080/api/payments/create",
+    //   null,
+    //   { params: { amount: 100, order_id: order_id } },
+    // );
+
+    let amt = 150;
+    const paymentRes = await createPaymentOrder(amt, order_id);
 
     console.log("PaymentRes", paymentRes);
 
@@ -145,15 +155,7 @@ const NewShipment = () => {
       description: "Courier Delivery Payment",
       order_id: razorpayOrderId,
 
-      handler: async function (response) {
-        // 4. Send payment details to backend for verification
-        await axios.post("http://localhost:8080/payments/verify", {
-          razorpayOrderId: response.razorpay_order_id,
-          razorpayPaymentId: response.razorpay_payment_id,
-          razorpaySignature: response.razorpay_signature,
-        });
-
-      },
+      handler: successPaymentHandler,
 
       prefill: {
         name: "Test User",
@@ -162,7 +164,7 @@ const NewShipment = () => {
       },
 
       theme: {
-        color: "#3399cc",
+        color: "#ef5706",
       },
     };
 
