@@ -122,3 +122,22 @@ export const staff_signup = async (
   // const body = {currentPassword, newPassword };
   return (await axiosInstance.post(`/staff/applyforjob`,body));
 };
+
+export const getAvailableOrders = async () => {
+  
+  return (await axiosInstance.get(`/staff/dashboard`)).data;
+};
+
+export const getAcceptedOrders = async () => {
+  let staffid = 1;
+  return (await axiosInstance.get(`/staff/accepted-orders/${staffid}`)).data;
+};
+
+export const getcurrentOrders = async () => {
+  let staffid = 1;
+  return (await axiosInstance.get(`/staff/current-orders/${staffid}`)).data;
+};
+
+
+
+

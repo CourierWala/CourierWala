@@ -7,8 +7,8 @@ export default function OrderCard({order,tab,onPickup,onHandover,btnInfo})
       {/* // order id and name */}
       <div className="flex justify-between">
         <div>
-          <p className="text-xs font-medium text-orange-600 pb-1">{order.id}</p>
-          <p className="text-sm font-medium"> customer Name - {order.customer}</p>
+          <p className="text-xs font-medium text-orange-600 pb-1">ORDER ID : {order.Orderid}</p>
+          <p className="text-sm font-medium"> Customer Name : {order.customerName}</p>
         </div>
         <span className="text-xs font-semibold text-green-600">
           {order.status}
@@ -17,11 +17,11 @@ export default function OrderCard({order,tab,onPickup,onHandover,btnInfo})
 
        {/* // order information */}
               <p className="text-xs text-slate-600">
-                📦 <span className="font-medium">Delivery:</span> {order.delivery} 📍 <span className="font-medium">Pickup:</span> {order.pickup}
+                📦 <span className="font-medium">Delivery:</span> {order.deliveryAddress} 📍 <span className="font-medium">Pickup:</span> {order.pickupAddress}
               </p>
 
               <p className="text-xs text-slate-600">
-                🏢 <span className="font-medium">Source Hub:</span> {order.sourceHub}    🏁 <span className="font-medium">Destination Hub:</span>{order.destinationHub} 
+                🏢 <span className="font-medium">Source Hub:</span> {order.sourceHubName}    🏁 <span className="font-medium">Destination Hub:</span>{order.destinationHubName} 
               </p>
 
           <div className="flex flex-wrap gap-3 text-xs text-slate-500 mt-1">
@@ -31,7 +31,7 @@ export default function OrderCard({order,tab,onPickup,onHandover,btnInfo})
           </div>
           <div>
             <div className="font-semibold ">
-              price - ₹{order.price}
+              Price - ₹{order.price}
             </div>
           </div>
           
