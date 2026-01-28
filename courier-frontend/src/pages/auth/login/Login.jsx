@@ -3,16 +3,18 @@ import { FiMail, FiLock } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import NavBar from "../../../components/common/NavBar";
 import { toast } from "react-toastify";
-import { customer_login } from "../../../api/customer";
+import axios from "axios";
+import { userLogin } from "../../../api/auth";
 
 const Login = () => {
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState("hapos@gmail.com");
-  const [password, setPassword] = useState("123456");
+  const [email, setEmail] = useState("omkar@gmail.com");
+  const [password, setPassword] = useState("Pass@123");
   const [remember, setRemember] = useState(false);
 
-  const onLogin = () => {
+  const onLogin = async (e) => {
+    e.preventDefault();
     const rules = [
       [email.trim(), "Email is required"],
       [/^\S+@\S+\.\S+$/.test(email), "Invalid email format"],
@@ -26,12 +28,15 @@ const Login = () => {
         return;
       }
     }
+    try {
+      const response = await userLogin(email, password);
+      console.log(response)
+      toast.success("Login successful");
+      navigate("/customer/dashboard");
+    } catch (error) {
+      console.log("error : ", error)
+    }
 
-
-    // API call later
-    //const response = await customer_login(email, password)
-    toast.success("Login successful");
-    navigate("/customer/dashboard");
   };
 
   return (
@@ -94,7 +99,7 @@ const Login = () => {
 
           {/* LOGIN BUTTON */}
           <button
-            onClick={onLogin}
+            onClick={(e) => onLogin(e)}
             className="w-full bg-orange-600 hover:bg-orange-700 text-white py-3 rounded-lg mb-4"
           >
             Sign In →
