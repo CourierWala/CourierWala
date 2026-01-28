@@ -2,15 +2,22 @@ import { useEffect, useState } from "react";
 import React from "react";
 import OrderCard from "../../components/common/Ordercard";
 import { ordersData } from "./orders";
+import { getcurrentOrders } from "../../api/staff";
 
 export default function CurrentOrders() {
   const [tab, setTab] = useState("customer");
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    setOrders(ordersData);
+    loadorders();
+    //setOrders(ordersData);
   }, []);
 
+  const loadorders = async() => {
+          const temp = await getcurrentOrders();
+          setOrders(temp);
+          console.log(temp);
+        }
   const customerOrders = orders.filter(o => o.status === "PICKED_UP");
   const outForDelivery = orders.filter(o => o.status === "OUT_FOR_DELIVERY");
 
@@ -57,12 +64,13 @@ export default function CurrentOrders() {
 
       {(tab === "customer" ? customerOrders : outForDelivery).map(order => (
         <OrderCard
-          key={order.id}
+          key={order.Orderid}
           order={order}
           tab={tab}
           onPickup={() => handlePickup(order.id)}
           onHandover={() => handleHandover(order.id)}
-        //   onOverview={() => alert(order.id)}
+          btnInfo = {{ label1:"Handover",label2:"Handover",color1 :"bg-green-600",color2 :"bg-green-600"}}
+        
         />
       ))}
     </div>

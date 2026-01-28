@@ -2,14 +2,22 @@ import { useEffect, useState } from "react";
 import React from "react";
 import OrderCard from "../../components/common/Ordercard";
 import { ordersData } from "./orders";
+import { getAcceptedOrders } from "../../api/staff";
 
 export default function AcceptedOrders() {
   const [tab, setTab] = useState("customer");
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    setOrders(ordersData);
+    loadorders();
+    // setOrders(ordersData);
   }, []);
+
+  const loadorders = async() => {
+        const temp = await getAcceptedOrders();
+        setOrders(temp);
+        //console.log(temp);
+      }
 
   const hubOrders = orders.filter(o => o.status === "PICKUP_ASSIGNED");
   const outForDelivery = orders.filter(o => o.status === "OUT_FOR_DELIVERY");
@@ -41,7 +49,7 @@ export default function AcceptedOrders() {
               ? "bg-white border-b-2 border-orange-600"
               : "text-slate-500"
           }`}>
-          Hub Orders
+           Accepted Customers Orders
         </button>
 
         <button
@@ -57,12 +65,13 @@ export default function AcceptedOrders() {
 
       {(tab === "customer" ? hubOrders : outForDelivery).map(order => (
         <OrderCard
-          key={order.id}
+          key={order.Orderid}
           order={order}
           tab={tab}
           onPickup={() => handlePickup(order.id)}
           onHandover={() => handleHandover(order.id)}
-          // onOverview={() => alert(order.id)}
+          btnInfo = {{ label1:"Pickup",color1 :"bg-orange-600"}}
+    
         />
       ))}
     </div>

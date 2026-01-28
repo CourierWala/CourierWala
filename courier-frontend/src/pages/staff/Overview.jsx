@@ -2,16 +2,24 @@ import { useEffect, useState } from "react";
 import React from 'react'
 import OrderCard from "../../components/common/Ordercard";
 import { ordersData } from "./orders";
+import { getAvailableOrders } from "../../api/staff";
 
 export default function Overview() {
   const [tab, setTab] = useState("customer");
   const [orders, setOrders] = useState([]);
  
-
-
   useEffect(() => {
-    setOrders(ordersData);
+    console.log("overview");
+    loadorders();
+    
   }, []);
+
+
+  const loadorders = async() => {
+      const temp = await getAvailableOrders();
+      setOrders(temp);
+      console.log(temp);
+    }
 
   const availableCustomerOrders = orders.filter(o => o.status === "CREATED");
   const availableHubOrders = orders.filter(o => o.status === "AT_DESTINATION_HUB");
@@ -61,32 +69,22 @@ export default function Overview() {
           Available Hub Orders ({availableHubOrders.length})
         </button>
       </div>
-
           {(tab === "customer" ? availableCustomerOrders : availableHubOrders).length === 0 && (
           <p className="text-sm text-slate-500 text-center py-6">
             No orders found.
           </p>
-        )}
+          )}
 
-      {(tab === "customer" ? availableCustomerOrders : availableHubOrders).map(order => (
-                  <OrderCard
-            key={order.id}
-            order={order}
-            tab={tab}
-            onPickup={
-              tab === "customer"
-                ? () => handlePickup(order.id)
-                : undefined
-            }
-            onHandover={
-              tab === "Hub"
-                ? () => handleHandover(order.id)
-                : undefined
-            }
-            // onOverview={() => alert(order.id)}
-          />
-
-      ))}
+          {(tab === "customer" ? availableCustomerOrders : availableHubOrders).map(order => (
+                      <OrderCard
+                            key={order.Orderid}
+                            order={order}
+                            tab={tab}
+                            onPickup={tab === "customer" ? () => handlePickup(order.id) : undefined  }
+                            onHandover={  tab === "Hub"  ? () => handleHandover(order.id)  : undefined }
+                            btnInfo = {{ label1:"Accept",label2:"Accept",color1 :"bg-orange-600",color2 :"bg-orange-600"}} 
+                       />
+            ))}
     </div>
   );
 }
