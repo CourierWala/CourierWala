@@ -5,11 +5,11 @@ import axiosInstance from "./axiosInstance";
 
 
 export const userLogin = (email, password) => {
-  const body = {email, password}
+  const body = { email, password }
   return axiosInstance.post("/auth/login", body);
 };
 
 export const customerSignup = (body) => {
-    return axiosInstance.post("/auth/signup");
+  return axiosInstance.post("/auth/signup", body);
 }
 

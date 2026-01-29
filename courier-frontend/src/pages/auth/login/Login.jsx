@@ -5,6 +5,7 @@ import NavBar from "../../../components/common/NavBar";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { userLogin } from "../../../api/auth";
+import { useAuth } from "../../../context/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -12,6 +13,8 @@ const Login = () => {
   const [email, setEmail] = useState("omkar@gmail.com");
   const [password, setPassword] = useState("Pass@123");
   const [remember, setRemember] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const { login, } = useAuth();
 
   const onLogin = async (e) => {
     e.preventDefault();
@@ -31,10 +34,21 @@ const Login = () => {
     try {
       const response = await userLogin(email, password);
       console.log(response)
+      const currRole = response.data.role.slice(1, -1);
+
+      const user = { email : response?.data.email, id : response.data.id, role : currRole }
+      login(user);
       toast.success("Login successful");
-      navigate("/customer/dashboard");
+      console.log("curr role : " , currRole)
+      if (currRole == "ROLE_CUSTOMER") navigate("/customer/dashboard");
+      else if (currRole == "ROLE_ADMIN") navigate("/admin/dashboard");
+      else if (currRole == "ROLE_DELIVERY_STAFF") navigate("/staff/dashboard");
+      else if (currRole == "ROLE_STAFF_MANAGER") navigate("/manager/dashboard");    // 'ROLE_ADMIN','ROLE_CUSTOMER','ROLE_DELIVERY_STAFF','ROLE_STAFF_MANAGER')
+
     } catch (error) {
       console.log("error : ", error)
+      console.log("error res : ", error.response)
+      setErrorMessage("Invalid Credential !!");
     }
 
   };
@@ -96,6 +110,9 @@ const Login = () => {
               Forgot password?
             </button>
           </div>
+          {
+            errorMessage && <div className="font-bold text-red-700 text-center m-2 p-2">Error : {errorMessage}</div>
+          }
 
           {/* LOGIN BUTTON */}
           <button

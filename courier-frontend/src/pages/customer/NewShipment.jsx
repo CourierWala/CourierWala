@@ -9,6 +9,7 @@ import { loadRazorpay } from "../../utils/loadRazorpay";
 import axios from "axios";
 import { createPaymentOrder, handlePaymentResponse } from "../../api/payment";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const NewShipment = () => {
   const [form, setForm] = useState({
@@ -28,6 +29,9 @@ const NewShipment = () => {
     deliveryLatitude: "",
     deliveryLongitude: "",
   });
+
+  const { user } = useAuth();
+  console.log(user);
 
   const [pickupLocation, setPickupLocation] = useState({});
   const [deliveryLocation, setDeliveryLocation] = useState({});
